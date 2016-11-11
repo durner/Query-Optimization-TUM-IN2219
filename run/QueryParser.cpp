@@ -5,6 +5,7 @@
 #include "operator/Projection.hpp"
 #include "operator/Printer.hpp"
 #include "operator/Chi.hpp"
+#include "QueryParser.hpp"
 #include <iostream>
 //---------------------------------------------------------------------------
 using namespace std;
