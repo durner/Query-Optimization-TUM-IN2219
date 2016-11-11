@@ -1,0 +1,11 @@
+obj_operator:=					\
+	bin/operator/Chi.o			\
+	bin/operator/CrossProduct.o		\
+	bin/operator/HashJoin.o			\
+	bin/operator/Indexscan.o		\
+	bin/operator/Operator.o			\
+	bin/operator/Printer.o			\
+	bin/operator/Projection.o		\
+	bin/operator/Selection.o		\
+	bin/operator/Tablescan.o
+

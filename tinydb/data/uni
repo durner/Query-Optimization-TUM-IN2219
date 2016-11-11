@@ -1,0 +1,44 @@
+assistenten
+6
+persnr 0 4 100 0 0 key
+name 3 4 100  
+fachgebiet 3 4 100  
+boss 0 4 100 0 0
+
+hoeren
+13
+matrnr 0 4 100 0 0
+vorlnr 0 4 100 0 0
+
+professoren
+7
+persnr 0 4 100 0 0 key
+name 3 4 100  
+rang 3 4 100  
+raum 0 4 100 0 0
+
+pruefen
+3
+matrnr 0 4 100 0 0
+vorlnr 0 4 100 0 0
+persnr 0 4 100 0 0
+note 0 4 100 0 0
+
+studenten
+8
+matrnr 0 4 100 0 0 key
+name 3 4 100  
+semester 0 4 100 0 0
+
+voraussetzen
+7
+vorgaenger 0 4 100 0 0
+nachfolger 0 4 100 0 0
+
+vorlesungen
+10
+vorlnr 0 4 100 0 0 key
+titel 3 4 100  
+sws 0 4 100 0 0
+gelesenvon 0 4 100 0 0
+

@@ -11,6 +11,7 @@ bin/*
 *.lo
 *.o
 *.obj
+*.d
 
 # Precompiled Headers
 *.gch

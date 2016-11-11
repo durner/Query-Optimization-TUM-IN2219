@@ -1,0 +1,7 @@
+include src/operator/LocalMakefile
+
+obj:=bin/Database.o bin/Register.o bin/Table.o bin/Attribute.o $(obj_operator)
+
+bin/admin$(EXEEXT): bin/Admin.o $(obj)
+	$(BUILDEXE)
+
