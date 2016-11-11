@@ -1,0 +1,6 @@
+bin/QueryParser$(EXEEXT): bin/run/QueryParser.o $(obj)
+	$(BUILDEXE)
+
+
+# Alias for all examples
+run_bin: bin/QueryParser$(EXEEXT)
