@@ -143,11 +143,14 @@ bool QueryParser::ParseWhereClause() {
     // left side can be either binding.attribute or constant
     bool join_predicate;
     t_where_right = Split(t_where_equals.at(1), ".");
-    // if we have a constant we are not allowed to have 1 dot. TODO floats,
-    // strings, ...
     // also no keywords allowed in tablename, attribute, constant (not sure if
     // this is an important issue/limitation)
-    if (t_where_right.size() != 2) {
+
+    auto it = std::find_if(
+        relations_.begin(), relations_.end(),
+        [&](const Relation& r) { return r.binding == t_where_right.at(0); });
+
+    if (t_where_right.size() != 2 || it == relations_.end()) {
       join_predicate = false;
     } else if (t_where_right.at(0).size() == 0 ||
                t_where_right.at(1).size() == 0)
