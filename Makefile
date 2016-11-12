@@ -1,4 +1,4 @@
-CXXFLAGS:=-g -std=c++0x -Wall -Wextra -Isrc -Iinclude
+CXXFLAGS:=-g -std=c++14 -Wall -Wextra -Isrc -Iinclude
 
 DEPTRACKING=-MD -MF $(@:.o=.d)
 BUILDEXE=/usr/bin/g++ -o$@ $(CXXFLAGS) $(LDFLAGS) $^
