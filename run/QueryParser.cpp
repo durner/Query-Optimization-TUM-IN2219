@@ -13,16 +13,11 @@ using namespace parser;
 //---------------------------------------------------------------------------
 
 int main(int argc, char** argv) {
-  QueryParser qp("data/uni", argv[0]);
-
-  Database db;
-  db.open("data/uni");
-  try {
-    db.getTable("studenten");
-  }
-  catch (const std::exception& e){
+  if (argc < 2)
     return -1;
-  }
-  return 0;
+
+  QueryParser qp("data/uni", argv[1]);
+
+  std::cout << "Query correct?: " << qp.ParseSQLQuery() << std::endl;
 }
 //---------------------------------------------------------------------------

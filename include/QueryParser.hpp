@@ -1,5 +1,5 @@
 #include "Database.hpp"
-#include <list>
+#include <vector>
 #include <string>
 
 namespace parser {
@@ -30,19 +30,19 @@ struct JoinSelection {
 class QueryParser {
 public:
   QueryParser(std::string database, std::string query);
+  bool ParseSQLQuery();
+
 private:
-  void ParseSQLQuery();
-  void ParseSelects();
-  void ParseRelations();
-  void ParseSelection();
-  void ParseJoinSelection();
+  bool ParseSelects();
+  bool ParseRelations();
+  bool ParseWhereClause();
 
   Database db_;
-  std::string query;
-  std::list<Select> selects_;
-  std::list<Relation> relations_;
-  std::list<Selection> selections_;
-  std::list<JoinSelection> join_selections_;
+  std::string query_;
+  std::vector<Select> selects_;
+  std::vector<Relation> relations_;
+  std::vector<Selection> selections_;
+  std::vector<JoinSelection> join_selections_;
 };
 
 } // end ns
