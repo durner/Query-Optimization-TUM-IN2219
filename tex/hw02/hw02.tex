@@ -1,0 +1,85 @@
+\documentclass{scrartcl}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{unicode-math}
+\setmathfont{XITS Math}
+
+\newcommand{\selection}{\sigma}
+\newcommand{\projection}{\pi}
+\newcommand{\rename}{\rho}
+\newcommand{\join}{\Join}
+% \fullouterjoin defined by unicode-math
+\newcommand{\semijoin}{\ltimes}
+\newcommand{\groupby}{\Gamma}
+
+\newcommand{\mtt}[1]{\text{\texttt{#1}}}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\section*{Exercise 1}
+
+Canonical translation:
+
+\begin{center}
+\begin{tikzpicture}[sibling distance=10em]
+    \node {
+        $\selection_{\begin{subarray}{l}
+                        \mtt{l.l\_orderkey} = \mtt{o.o\_orderkey} \wedge \\
+                        \mtt{o.o\_custkey} = \mtt{c.c\_custkey} \wedge \\
+                        \mtt{c.c\_name} = \mtt{"Customer\#000014993"}
+                     \end{subarray}}$
+    }
+    child {
+        node {$\times$}
+        child {
+            node {$\times$}
+            child {node {\texttt{lineitem}}}
+            child {node {\texttt{orders}}}
+        }
+        child {node {\texttt{customers}}}
+    };
+\end{tikzpicture}
+\end{center}
+
+Logical optimization:
+
+\begin{center}
+\begin{tikzpicture}[sibling distance=10em]
+    \node {$\join_{\mtt{l.l\_orderkey} = \mtt{o.o\_orderkey}}$}
+    child {
+        node {$\join_{\mtt{o.o\_custkey} = \mtt{c.c\_custkey}}$}
+        child {
+            node {$\selection_{\mtt{c.c\_name} = \mtt{"Customer\#000014993"}}$}
+            child {node {\texttt{customers}}}
+        }
+        child {node {\texttt{orders}}}
+    }
+    child {node {\texttt{lineitem}}};
+\end{tikzpicture}
+\end{center}
+
+\subsection*{Exercise 2}
+
+\subsubsection*{1.}
+
+If we know that $R1.x$ is a key, we know that a given value for $x$ can only
+occur at most once. So we can estimate the selectivity by $\frac{1}{|R1|}$.
+
+\subsubsection*{2.}
+
+If we know that both $R1.x$ and $R2.y$ are keys, every tuple will be joined with
+at most one other, so the output size is limited to $\min\{|R1|, |R2|\}$. This
+means we can estimate the selectivity by $\frac{\min\{|R1|, |R2|\}}{|R1| \cdot
+|R2|}$.
+
+If we know that only $R1.x$ is a key, the argument still holds: Every tuple from
+$R2$ will only be joined with at most one tuple from $R1$. So we can estimate
+the selectivity by $\frac{|R2|}{|R1| \cdot |R2|}$.
+
+Analogously, if only $R2.y$ is a key, we can estimate the selectivity by
+$\frac{|R1|}{|R1| \cdot |R2|}$.
+
+\end{document}
