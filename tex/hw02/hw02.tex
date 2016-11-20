@@ -101,11 +101,10 @@ For running over the left side we need 10000ms for transferring the pages to the
 we need 10ms for the first page to seek (random access cost). All other pages are assumed to lie next on disk, hence we
 ignore the seek costs. Summing all up we get for each run through the right side costs of 10010ms.
 Since we can compare 100 pages at the same time on the left side we get the total cost for the right side with
-(100/1000) * 10010ms. Additionally accessing the left side we need to seek (100/1000) pages, since all right side pages
-are in between those might not be in RAM anymore. Also we have (100/10000)s transfer cost.
-Hence, we need additional (100/1000) * 20ms.
+(1000/100) * 10010ms. Additionally accessing the left side we need to seek (1000/100) pages. Also we have (100/10000)s
+transfer cost. Hence, we need additional (1000/100) * 20ms.
 \begin{align}
-100 * 20 ms + 10 * 10010ms = 102100 ms
+(1000/100) * 20 ms + (1000/100) * 10010ms = 100300 ms
 \end{align}
 
 \end{document}
