@@ -1,0 +1,2 @@
+obj_semana:=					\
+	bin/cts/semana/SemanticAnalysis.o   \

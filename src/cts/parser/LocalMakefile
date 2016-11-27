@@ -1,0 +1,3 @@
+obj_sqlparser:=					\
+	bin/cts/parser/SQLLexer.o   \
+	bin/cts/parser/SQLParser.o

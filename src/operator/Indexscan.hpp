@@ -1,7 +1,7 @@
 #ifndef H_operator_IndexScan
 #define H_operator_IndexScan
 //---------------------------------------------------------------------------
-#include "operator/Operator.hpp"
+#include "Operator.hpp"
 #include "Table.hpp"
 //---------------------------------------------------------------------------
 /// An indexscan operator

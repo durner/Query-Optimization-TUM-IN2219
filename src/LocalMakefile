@@ -1,7 +1,13 @@
 include src/operator/LocalMakefile
+include src/cts/LocalMakefile
 
-obj:=bin/Database.o bin/Register.o bin/Table.o bin/Attribute.o bin/QueryParser.o $(obj_operator)
+obj_rts:=bin/Database.o bin/Register.o bin/Table.o bin/Attribute.o $(obj_operator)
 
-bin/admin$(EXEEXT): bin/Admin.o $(obj)
+bin/admin$(EXEEXT): bin/Admin.o $(obj_rts)
 	$(BUILDEXE)
 
+bin/isql$(EXEEXT): bin/isql.o $(obj_rts) $(obj_sqlparser) $(obj_semana)
+	$(BUILDEXE)
+
+bin/runsql$(EXEEXT): bin/runsql.o $(obj_rts) $(obj_sqlparser) $(obj_semana)
+	$(BUILDEXE)

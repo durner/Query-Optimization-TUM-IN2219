@@ -1,7 +1,7 @@
 #ifndef H_operator_Projection
 #define H_operator_Projection
 //---------------------------------------------------------------------------
-#include "operator/Operator.hpp"
+#include "Operator.hpp"
 #include <memory>
 //---------------------------------------------------------------------------
 /// A projection

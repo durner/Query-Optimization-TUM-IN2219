@@ -1,7 +1,7 @@
 #ifndef H_operator_Selection
 #define H_operator_Selection
 //---------------------------------------------------------------------------
-#include "operator/Operator.hpp"
+#include "Operator.hpp"
 #include <memory>
 //---------------------------------------------------------------------------
 /// A selection
