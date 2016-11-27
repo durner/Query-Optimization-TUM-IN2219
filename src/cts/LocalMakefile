@@ -1,0 +1,2 @@
+include src/cts/parser/LocalMakefile
+include src/cts/semana/LocalMakefile

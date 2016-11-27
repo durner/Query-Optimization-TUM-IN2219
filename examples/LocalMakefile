@@ -1,19 +1,19 @@
-bin/scanexample$(EXEEXT): bin/examples/ScanExample.o $(obj)
+bin/scanexample$(EXEEXT): bin/examples/ScanExample.o $(obj_rts)
 	$(BUILDEXE)
 
-bin/selectexample$(EXEEXT): bin/examples/SelectExample.o $(obj)
+bin/selectexample$(EXEEXT): bin/examples/SelectExample.o $(obj_rts)
 	$(BUILDEXE)
 
-bin/joinexample$(EXEEXT): bin/examples/JoinExample.o $(obj)
+bin/joinexample$(EXEEXT): bin/examples/JoinExample.o $(obj_rts)
 	$(BUILDEXE)
 	
-bin/chiexample$(EXEEXT): bin/examples/ChiExample.o $(obj)
+bin/chiexample$(EXEEXT): bin/examples/ChiExample.o $(obj_rts)
 	$(BUILDEXE)
 
-bin/schopenhauersfriends$(EXEEXT): bin/examples/SchopenhauersFriends.o $(obj)
+bin/schopenhauersfriends$(EXEEXT): bin/examples/SchopenhauersFriends.o $(obj_rts)
 	$(BUILDEXE)
 
-bin/proftwostudents$(EXEEXT): bin/examples/ProfTwoStudents.o $(obj)
+bin/proftwostudents$(EXEEXT): bin/examples/ProfTwoStudents.o $(obj_rts)
 	$(BUILDEXE)
 
 # Alias for all examples

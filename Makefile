@@ -1,4 +1,4 @@
-CXXFLAGS:=-g -std=c++14 -Wall -Wextra -Isrc -Iinclude
+CXXFLAGS:=-g -std=c++14 -Wall -Wextra -Isrc
 
 DEPTRACKING=-MD -MF $(@:.o=.d)
 BUILDEXE=/usr/bin/g++ -o$@ $(CXXFLAGS) $(LDFLAGS) $^
@@ -13,11 +13,10 @@ CHECKDIR=@mkdir -p $(dir $@)
 EXEEXT:=
 endif
 
-all: bin/admin$(EXEEXT) examples_bin run_bin
+all: bin/admin$(EXEEXT) bin/isql$(EXEEXT) examples_bin
 
 include src/LocalMakefile
 include examples/LocalMakefile
-include run/LocalMakefile
 
 -include bin/*.d bin/*/*.d
 
@@ -28,11 +27,6 @@ bin/%.o: src/%.cpp
 bin/examples/%.o: examples/%.cpp
 	$(CHECKDIR)
 	/usr/bin/g++ -o$@ -c $(CXXFLAGS) $(DEPTRACKING) $<
-
-bin/run/%.o: run/%.cpp
-	$(CHECKDIR)
-	/usr/bin/g++ -o$@ -c $(CXXFLAGS) $(DEPTRACKING) $<
-
 
 clean:
 	find bin -name '*.d' -delete -o -name '*.o' -delete -o '(' -perm -u=x '!' -type d ')' -delete
