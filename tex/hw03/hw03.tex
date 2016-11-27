@@ -1,0 +1,80 @@
+\documentclass{scrartcl}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{unicode-math}
+\setmathfont{XITS Math}
+\usepackage{forest}
+
+\newcommand{\selection}{\sigma}
+\newcommand{\projection}{\pi}
+\newcommand{\rename}{\rho}
+\newcommand{\join}{\Join}
+% \fullouterjoin defined by unicode-math
+\newcommand{\semijoin}{\ltimes}
+\newcommand{\groupby}{\Gamma}
+
+\newcommand{\mtt}[1]{\text{\texttt{#1}}}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\section*{Exercise 1}
+
+\subsection*{Bad Selection Estimation}
+Assume we have a table t1 with 1100 elements, where 1000 elements are with the value x = 0. The other 100 elements get
+the numbers $x = \{1\dots100\}$, s.t.\ each x value of these remaining elements is unique. Furthermore, we have a second
+attribute y with the value's $y = \{1\dots50\}$, s.t.\ each y value appears the same amount of times in the table t1.
+
+Assuming our non key formula $$\frac{1}{|t1.x|}$$ we get selectivity of $\frac{1}{101}$ for x and $\frac{1}{50}$ for y.
+If we query "SELECT * FROM t1 WHERE t1.x = 0 and t1.y = 1" the query plan would first evaluate the selection of x and
+then y, but it would be better to do it the other way since the real selectivity of x is $\frac{1000}{1100}$.
+
+\subsection*{Bad Join Estimation}
+Assume we have a table t1 with 1100 elements, where 1000 elements are with the value x = 0. The other 100 elements get
+the numbers $x = \{1\dots100\}$, s.t.\ each x value of these remaining elements is unique. Furthermore, we have a second
+table t2 with 500 tuples with an attribute y with the value's $y = \{0\dots99\}$, s.t.\ each y value appears the same
+amount of times in the table t2. We also have a third table t3 with 1000 tuples with an attribute z with the values
+$z = \{1\dots100\}$, s.t.\ each z value appears the same amount of times in the table t3.
+
+
+Assuming our fromula of non key attribute joins
+$$\frac{1}{max\{|R1.x|, |R2.y|\}}$$ we get selectivity of $\frac{1}{101}$ for t1.x, $\frac{1}{100}$ for t2.y and
+$\frac{1}{100}$ for t3.z. Assume the query "SELECT * FROM t1, t2, t3 WHERE t1.x = t2.y and t1.x = t3.z". The query plan
+would be first joining t1 and t2 since $500*1100 * \frac{1}{100}$ is smaller than t1 and t3 with
+$1000*1100 * \frac{1}{100}$. Also the cross product t2 and t3 makes no sense to join afterwards on t1.
+Hence, the join tree would be t1-t2-t3. But since the real output of t1-t2 is obviously much higher (because of all
+the 0 values), the better plan would be to join t1-t3-t2.
+
+
+\section*{Exercise 2}
+
+Assume we have four relations t1, t2, t3, and t4. t1 has 1000 tuples and two attributes: unique key x and a. a is
+calculated with x mod 2. t2 has 1000 tuples and two attributes: unique key y and b. b is calculated with y mod 2.
+Also assume that for both relations t1 and t2 the keys are in $[1\dots1000]$.
+t3 has 2 tuples with one attribute v. The tuples are $v = 0$ and $v = 1$. t4 has 2 tuples with one attribute u. The
+tuples are $u = 0$ and $u = 1$.
+
+The query "SELECT * FROM t1, t2, t3, t4 WHERE t1.x = t2.y AND t1.a = t3.v AND t2.b = t4.u" can be calculated most
+efficient with a bushy tree using cross products.
+
+\begin{center}
+\begin{forest}
+[$\join_{\mtt{t1.a=t3.v} \wedge \mtt{t2.b=t4.u}}$
+    [$\times$ [t3] [t4]]
+    [$\join_{\mtt{t1.a} = \mtt{t2.b}}$ [t1] [t2]]
+]
+\end{forest}
+\end{center}
+
+Its cost is:
+\begin{align*}
+C_{out}((t3 \times t4) \join (t1 \join t2)) &= |(t3 \times t4) \join (t1 \join t2)| + C_{out}(t3 \times t4) + C_{out}(t1 \join t2) \\
+&= 1000 + |t3 \times t4| + C_{out}(t3) + C_{out}(t4) + |t1 \join t2| + C_{out}(t1) + C_{out}(t2) \\
+&= 1000 + 4 + 1000 \\
+&= 2004
+\end{align*}
+Any other tree has higher $C_{out}$ cost.
+
+\end{document}
