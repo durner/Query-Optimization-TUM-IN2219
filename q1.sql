@@ -1,3 +1,3 @@
 select s.name, s.semester, h.matrnr
 from studenten s, hoeren h
-where s.matrnr =   h.matrnr 
+where s.matrnr =   h.matrnr AND s.semester=2

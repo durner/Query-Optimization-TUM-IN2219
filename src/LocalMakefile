@@ -11,3 +11,6 @@ bin/isql$(EXEEXT): bin/isql.o $(obj_rts) $(obj_sqlparser) $(obj_semana)
 
 bin/runsql$(EXEEXT): bin/runsql.o $(obj_rts) $(obj_sqlparser) $(obj_semana)
 	$(BUILDEXE)
+
+bin/QueryGraph$(EXEEXT): bin/QueryGraph.o $(obj_rts) $(obj_sqlparser) $(obj_semana)
+	$(BUILDEXE)

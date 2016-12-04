@@ -4,3 +4,8 @@
 
 After running `make` the program `bin/runsql` can be used to execute a SQL
 query. It takes the same arguments as `isql`, i.e. `runsql <db> <query file>`.
+
+## Exercise 4.2
+
+After running `make` the program `bin/QueryGraph` can be used to execute a SQL
+query. It takes the same arguments as `isql`, i.e. `QueryGraph <db> <query file>`.
