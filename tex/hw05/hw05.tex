@@ -1,0 +1,51 @@
+\documentclass{scrartcl}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{unicode-math}
+\setmathfont{XITS Math}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\newcommand{\selection}{\sigma}
+\newcommand{\projection}{\pi}
+\newcommand{\rename}{\rho}
+\newcommand{\join}{\Join}
+% \fullouterjoin defined by unicode-math
+\newcommand{\semijoin}{\ltimes}
+\newcommand{\groupby}{\Gamma}
+
+\newcommand{\mtt}[1]{\text{\texttt{#1}}}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\section*{Exercise 1}
+
+The final results are marked in the Table~\ref{exercise1}. The best join tree according to
+$C_{out}$ is $(A \join B) \join C$.
+
+\begin{table}[]
+\centering
+\caption{DPsub Table}
+\label{exercise1}
+\begin{tabular}{@{}llll@{}}
+\rowcolor[HTML]{F8A102}
+Set & Plan & Cost & Card \\
+A & $A$ & 0 & 10 \\
+B & $B$ & 0 & 20 \\
+A,B & $A \join B$ & 100 & 100 \\
+C & $C$ & 0 & 100 \\
+A, C & $A \join C$ & 1000 & 1000 \\
+B, C & $B \join C$ & 200 & 200 \\
+\rowcolor[HTML]{FFCC67}
+A, B, C & $(A \join B) \join C$ & 1100 & 1000 \\
+\rowcolor[HTML]{FFCC67}
+ & $(A \join C) \join B$ & 2000 & 1000 \\
+\rowcolor[HTML]{FFCC67}
+ & $(B \join C) \join A$ & 1200 & 1000 \\
+\end{tabular}
+\end{table}
+
+\end{document}
