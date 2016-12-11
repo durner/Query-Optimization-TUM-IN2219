@@ -1,6 +1,10 @@
+#ifndef _QueryGraph_hpp
+#define _QueryGraph_hpp
+
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include "Database.hpp"
 #include "cts/parser/SQLParser.hpp"
 
 struct QueryGraphNode {
@@ -20,6 +24,13 @@ struct QueryGraphEdge {
     double selectivity_;
 };
 
+using QueryGraph = std::unordered_map<
+    std::string,
+    std::pair<QueryGraphNode, std::vector<QueryGraphEdge>>
+>;
+
+QueryGraph make_query_graph(Database& db, const SQLParser::Result& res);
+
 
 namespace std {
   template <> struct hash<QueryGraphNode>
@@ -30,3 +41,5 @@ namespace std {
     }
   };
 }
+
+#endif
