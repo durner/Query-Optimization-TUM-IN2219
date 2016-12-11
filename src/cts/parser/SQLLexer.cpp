@@ -76,7 +76,7 @@ SQLLexer::Token SQLLexer::getNext(){
             --pos;
             while (pos!=input.end()) {
                char c=*pos;
-               if (isalnum(c)) {
+               if (isalnum(c) || c == '_') {
                   ++pos;
                } else break;
             }
