@@ -6,6 +6,7 @@
 \setmathfont{XITS Math}
 \usepackage{tikz}
 \usetikzlibrary{positioning}
+\usepackage{listings}
 
 \newcommand{\selection}{\sigma}
 \newcommand{\projection}{\pi}
@@ -47,5 +48,13 @@ A, B, C & $(A \join B) \join C$ & 1100 & 1000 \\
  & $(B \join C) \join A$ & 1200 & 1000 \\
 \end{tabular}
 \end{table}
+
+\section*{Exercise 3}
+
+Running our program on the given query gives the following result:
+\begin{lstlisting}
+J0 = orders o |><| customer c  Cost: 150000
+Result = lineitem l |><| J0  Cost: 750572
+\end{lstlisting}
 
 \end{document}
