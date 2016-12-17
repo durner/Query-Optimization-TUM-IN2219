@@ -1,0 +1,110 @@
+\documentclass{scrartcl}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[geometry]{ifsym}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\newcommand{\selection}{\sigma}
+\newcommand{\projection}{\pi}
+\newcommand{\rename}{\rho}
+\newcommand{\join}{\mathbin{\text{\begin{tiny}\textifsym{|><|}\end{tiny}}}}
+\newcommand{\fullouterjoin}{\mathbin{\text{\begin{tiny}\textifsym{d|><|d}\end{tiny}}}}
+\newcommand{\semijoin}{\mathbin{\text{\begin{tiny}\textifsym{|><}\end{tiny}}}}
+\newcommand{\groupby}{\Gamma}
+
+\newcommand{\mtt}[1]{\text{\texttt{#1}}}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\section*{Exercise 1}
+
+Label nodes breadth-first:
+
+\begin{table}[h]
+\begin{tabular}{l|l}
+Relation & Label \\ \hline
+$R_0$ & 0 \\
+$R_1$ & 2 \\
+$R_2$ & 3 \\
+$R_3$ & 1 \\
+$R_4$ & 4
+\end{tabular}
+\end{table}
+
+This results in the following graph:
+
+\begin{tikzpicture}
+    \node (L0) {0};
+    \node (L2) [right=of L0] {2};
+    \node (L4) [right=of L2] {4};
+    \node (L1) [below=of L0] {1};
+    \node (L3) [right=of L1] {3};
+    \draw
+        (L0) edge (L2)
+        (L2) edge (L4)
+        (L0) edge (L1)
+        (L2) edge (L3)
+        (L1) edge (L3);
+\end{tikzpicture}
+
+The DPccp algorithm gives us the following ccp of labels:
+
+\begin{table}[h]
+\begin{tabular}{ll}
+Connected subraphs & Complementary subgraphs \\ \hline\hline
+$\{4\}$ & \\ \hline
+$\{3\}$ & \\ \hline
+$\{2\}$ & $\{4\}$ \\
+& $\{3\}$ \\ \hline
+$\{2, 3\}$ & $\{4\}$ \\ \hline
+$\{2, 4\}$ & $\{3\}$ \\ \hline
+$\{2, 3, 4\}$ & \\ \hline
+$\{1\}$ & $\{3\}$ \\
+& $\{2,3\}$ \\
+& $\{2,3,4\}$ \\ \hline
+$\{1, 3\}$ & $\{2\}$ \\
+& $\{2,4\}$ \\ \hline
+$\{1, 2, 3\}$ & $\{4\}$ \\ \hline
+$\{1, 2, 3, 4\}$ \\ \hline
+$\{0\}$ & $\{2\}$ \\
+& $\{2, 3\}$ \\
+& $\{2, 4\}$ \\
+& $\{2, 3, 4\}$ \\
+& $\{1\}$ \\
+& $\{1, 3\}$ \\
+& $\{1, 2, 3\}$ \\
+& $\{1, 2, 3, 4\}$
+\end{tabular}
+\end{table}
+\begin{table}[h]
+\begin{tabular}{ll}
+Connected subraphs & Complementary subgraphs \\ \hline\hline
+$\{0, 1\}$ & $\{3\}$ \\
+& $\{2\}$ \\
+& $\{2, 3\}$ \\
+& $\{2, 4\}$ \\
+& $\{2, 3, 4\}$ \\ \hline
+$\{0, 2\}$ & $\{4\}$ \\
+& $\{3\}$ \\
+& $\{1\}$ \\
+& $\{1, 3\}$ \\ \hline
+$\{0, 1, 2\}$ & $\{4\}$ \\
+& $\{3\}$ \\ \hline
+$\{0, 1, 3\}$ & $\{2\}$ \\
+& $\{2, 4\}$ \\ \hline
+$\{0, 2, 3\}$ & $\{4\}$ \\
+& $\{1\}$ \\ \hline
+$\{0, 2, 4\}$ & $\{3\}$ \\
+& $\{1\}$ \\
+& $\{1, 3\}$ \\ \hline
+$\{0, 2, 3, 4\}$ & $\{1\}$ \\ \hline
+$\{0, 1, 2, 3\}$ & $\{4\}$ \\ \hline
+$\{0, 1, 2, 4\}$ & $\{3\}$ \\ \hline
+$\{0, 1, 2, 3, 4\}$
+\end{tabular}
+\end{table}
+
+\end{document}
