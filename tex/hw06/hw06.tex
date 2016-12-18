@@ -11,8 +11,14 @@
 \newcommand{\rename}{\rho}
 \newcommand{\join}{\mathbin{\text{\begin{tiny}\textifsym{|><|}\end{tiny}}}}
 \newcommand{\fullouterjoin}{\mathbin{\text{\begin{tiny}\textifsym{d|><|d}\end{tiny}}}}
+\newcommand{\leftouterjoin}{\mathbin{\text{\begin{tiny}\textifsym{d|><|}\end{tiny}}}}
+\newcommand{\rightouterjoin}{\mathbin{\text{\begin{tiny}\textifsym{|><|d}\end{tiny}}}}
 \newcommand{\semijoin}{\mathbin{\text{\begin{tiny}\textifsym{|><}\end{tiny}}}}
 \newcommand{\groupby}{\Gamma}
+
+\newcommand{\hyperedge}[4][180]{
+     \draw (#2.#1) ++(#1:.5)  edge (#2) edge (#3) edge (#4);
+}
 
 \newcommand{\mtt}[1]{\text{\texttt{#1}}}
 
@@ -172,5 +178,40 @@ results in the following graph:
         (R1) edge (R2)
         (R3) edge (R2);
 \end{tikzpicture}
+\section*{Exercise 3}
+
+\begin{align}
+    (R \join S) \rightouterjoin T \equiv R \join (S \rightouterjoin T)\\
+    (R \rightouterjoin S) \join T \not\equiv R \rightouterjoin (S  \join T)\\
+    (R \join S) \join T \equiv R \join (S \join T)
+\end{align}
+\begin{table}[h]
+\begin{tabular}{l|l|l}
+    Join & SES & TES \\ \hline
+    $\join_{A.x = B.y}$ & \{A, B\} & \{A, B\} \\
+    $\join_{B.x = C.y}$ & \{B, C\} & \{B, C\}\\
+    $\rightouterjoin_{C.x = E.y}$ & \{C, E\} & \{C, E, F\} \\
+    $\join_{C.y = D.x}$ & \{C, D\} & \{C, D\}\\
+    $\join_{E.x = F.y}$ & \{E, F\} & \{E, F\}
+\end{tabular}
+\end{table}
+
+The Graph looks as follows.
+
+\begin{tikzpicture}
+    \node (A) {$A$};
+    \node (B) [right=of A] {$B$};
+    \node (C) [right=of B] {$C$};
+    \node (D) [below=of C] {$D$};
+    \node (F) [right=of D] {$F$};
+    \node (E) [right=of F] {$E$};
+    \draw
+        (B) edge (C)
+        (A) edge (B)
+        (F) edge (E)
+        (C) edge (D);
+    \hyperedge[0]{C}{E}{F}
+\end{tikzpicture}
+
 
 \end{document}
