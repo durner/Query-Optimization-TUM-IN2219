@@ -1,10 +1,11 @@
-#include "GOO.hpp"
+#include "Algorithms.hpp"
 #include <algorithm>
 #include <iostream>
 #include <limits>
 #include <list>
 #include <stack>
 #include <tuple>
+#include <math.h>
 #include <unordered_map>
 
 
@@ -172,4 +173,152 @@ JoinTree run_goo(const QueryGraph& graph) {
         tree.push_back(new_tree);
     }
     return tree.front();
+}
+
+bool subset(uint32_t r1, uint32_t r2) {
+    uint32_t res = r1 & r2;
+    if (!res)
+        return false;
+    else
+        return true;
+}
+
+bool crossproduct(const std::unordered_map<uint32_t, QueryGraphNode>& map, uint32_t r1,
+        uint32_t r2, const QueryGraph& graph) {
+    uint32_t pos1 = 1, pos2 = 1;
+    while (r1 != 0)
+    {
+        unsigned long long bit = r1 & 1;
+        if( bit == 1 )
+        {
+            while (r2 != 0)
+            {
+                unsigned long long bit2 = r2 & 1;
+                if( bit2 == 1 )
+                {
+                    const auto& edges = graph.at(map.find(pos1)->second.relation_.binding).second;
+                    const auto& binding2 = map.find(pos2)->second.relation_.binding;
+                    for (const auto& edge : edges) {
+                        if (!binding2.compare(edge.connected_to_.relation_.binding)) {
+                            return false;
+                        }
+                    }
+                }
+                ++pos2;
+                r2 >>= 1;
+            }
+        }
+        ++pos1;
+        r1 >>= 1;
+    }
+    return true;
+}
+
+void printDPTable(const std::unordered_map<uint32_t, DPEntry>& table,
+        const std::unordered_map<uint32_t, QueryGraphNode>& map) {
+    for (const auto& entry : table) {
+        uint32_t r = entry.first;
+        uint32_t pos = 1;
+        std::string relations = "{";
+        while (r != 0)
+        {
+            unsigned long long bit = r & 1;
+            if( bit == 1 )
+            {
+                const auto& binding = map.find(pos)->second.relation_.binding;
+                relations += binding + ", ";
+            }
+            ++pos;
+            r >>= 1;
+        }
+        relations = relations.substr(0, relations.size()-2);
+        std::cout << "Relations: " << relations << "} | Cost: "
+            << entry.second.cost << " | Card: " << entry.second.card << std::endl;
+    }
+
+}
+
+void printDPEntry(uint32_t r, DPEntry entry,
+    const std::unordered_map<uint32_t, QueryGraphNode>& map) {
+    uint32_t pos = 1;
+    std::string relations = "{";
+    while (r != 0)
+    {
+        unsigned long long bit = r & 1;
+        if( bit == 1 )
+        {
+            const auto& binding = map.find(pos)->second.relation_.binding;
+            relations += binding + ", ";
+        }
+        ++pos;
+        r >>= 1;
+    }
+    relations = relations.substr(0, relations.size()-2);
+    std::cout << "Relations: " << relations << "} | Cost: "
+        << entry.cost << " | Card: " << entry.card << std::endl;
+}
+
+
+
+
+JoinTree run_dp(const QueryGraph& graph) {
+    uint32_t tree_size = 0;
+    uint32_t tree_ctr = 1;
+    std::unordered_map<uint32_t, QueryGraphNode> map;
+
+    std::unordered_map<uint32_t, DPEntry> table;
+
+    for (const auto& entry : graph) {
+        tree_size++;
+        map.insert(std::make_pair(tree_size, entry.second.first));
+
+        DPEntry dp_entry { entry.second.first, 0, (double) entry.second.first.cardinality_ };
+        table.insert(std::make_pair(tree_ctr, dp_entry));
+        tree_ctr = 2 * tree_ctr;
+    }
+
+    uint32_t n = pow(2, tree_size);
+
+    for (uint32_t i = 1; i < n; ++i) {
+        for (uint32_t relation = 1; relation <= i; ++relation) {
+            if (!subset(relation, i))
+                continue;
+
+            for (uint32_t s1 = 1; s1 <= i; ++s1) {
+                if (!subset(relation, s1) && !crossproduct(map, relation, s1, graph)) {
+                    auto p1 = table.find(relation);
+                    auto p2 = table.find(s1);
+
+                    if (p1 == table.end() || p2 == table.end())
+                        continue;
+
+                    double cost = JoinTree::cost(graph, p1->second.plan, p2->second.plan);
+                    double current_cost = table.find(s1 + relation) != table.end() ?
+                        table.find(s1 + relation)->second.plan.cost(graph) : std::numeric_limits<uint32_t>::max();
+
+                    if (current_cost < cost)
+                        continue;
+
+                    JoinTree new_tree {p1->second.plan, p2->second.plan};
+                    DPEntry dp_entry { new_tree, cost, new_tree.cardinality(graph)};
+                    table.insert(std::make_pair(relation + s1, dp_entry));
+
+                }
+            }
+        }
+#ifdef _ALGO_DEBUG_
+        if (table.find(i) != table.end()) {
+            printDPEntry(i, table.find(i)->second, map);
+        }
+#endif
+
+    }
+
+#ifndef _ALGO_DEBUG_
+    printDPTable(table, map);
+#endif
+
+    std::cout << std::endl << std::endl;
+
+    return table.find(n-1)->second.plan;
 }

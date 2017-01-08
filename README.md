@@ -13,5 +13,10 @@ query. It takes the same arguments as `isql`, i.e. `QueryGraph <db> <query file>
 ## Exercise 5.2
 
 After running `make` the program `bin/GOO` can be used to run Greedy Operator
-Ordering on a query. It takes the same arguments as `isql`, i.e. `QueryGraph
+Ordering on a query. It takes the same arguments as `isql`, i.e. `GOO
 <db> <query file>`.
+
+## Exercise 7
+
+After running `make` the program `bin/DP` can be used to run DPsub on a
+query. It takes the same arguments as `isql`, i.e. `DP <db> <query file>`.
