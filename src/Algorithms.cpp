@@ -5,7 +5,6 @@
 #include <list>
 #include <stack>
 #include <tuple>
-#include <math.h>
 #include <unordered_map>
 
 
@@ -277,7 +276,7 @@ JoinTree run_dp(const QueryGraph& graph) {
         tree_ctr = 2 * tree_ctr;
     }
 
-    uint32_t n = pow(2, tree_size);
+    uint32_t n = 1 << tree_size;
 
     for (uint32_t i = 1; i < n; ++i) {
         for (uint32_t relation = 1; relation <= i; ++relation) {
