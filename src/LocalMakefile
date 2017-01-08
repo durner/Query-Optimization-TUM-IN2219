@@ -2,7 +2,7 @@ include src/operator/LocalMakefile
 include src/cts/LocalMakefile
 
 obj_rts:=bin/Database.o bin/Register.o bin/Table.o bin/Attribute.o bin/QueryGraph.o \
-	 bin/GOO.o $(obj_operator)
+	 bin/Algorithms.o $(obj_operator)
 
 bin/admin$(EXEEXT): bin/Admin.o $(obj_rts)
 	$(BUILDEXE)
@@ -17,4 +17,7 @@ bin/QueryGraph$(EXEEXT): bin/QueryGraphTest.o $(obj_rts) $(obj_sqlparser) $(obj_
 	$(BUILDEXE)
 
 bin/GOO$(EXEEXT): bin/GOOTest.o $(obj_rts) $(obj_sqlparser) $(obj_semana)
+	$(BUILDEXE)
+	
+bin/DP$(EXEEXT): bin/DPTest.o $(obj_rts) $(obj_sqlparser) $(obj_semana)
 	$(BUILDEXE)

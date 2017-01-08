@@ -7,6 +7,8 @@
 #include <vector>
 #include "QueryGraph.hpp"
 
+#define _ALGO_DEBUG_
+
 
 class JoinTree {
 private:
@@ -42,6 +44,13 @@ public:
       left_tree{std::make_unique<JoinTree>(left)},
       right_tree{std::make_unique<JoinTree>(right)} {}
 
+    JoinTree(JoinTree& left, JoinTree& right)
+    : is_leaf{false}, leaf_node{nullptr},
+      left_tree{std::make_unique<JoinTree>(left)},
+      right_tree{std::make_unique<JoinTree>(right)} {}
+
+
+
     double cardinality(const QueryGraph& graph) const;
     static double cardinality(
         const QueryGraph& graph, const JoinTree& left, const JoinTree& right
@@ -55,7 +64,26 @@ public:
     void print_tree_with_costs(const QueryGraph& graph) const;
 };
 
+struct DPEntry {
+    JoinTree plan;
+    double cost;
+    double card;
+};
+
 
 JoinTree run_goo(const QueryGraph& graph);
+
+JoinTree run_dp(const QueryGraph& graph);
+
+void printDPEntry(uint32_t r, DPEntry entry,
+    const std::unordered_map<uint32_t, QueryGraphNode>& map);
+
+void printDPTable(const std::unordered_map<uint32_t, DPEntry>& table,
+        const std::unordered_map<uint32_t, QueryGraphNode>& map);
+
+bool crossproduct(const std::unordered_map<uint32_t, QueryGraphNode>& map, uint32_t r1,
+        uint32_t r2, const QueryGraph& graph);
+
+bool subset(uint32_t r1, uint32_t r2);
 
 #endif

@@ -56,7 +56,7 @@ int main(int argc, char* argv[]){
     }
 
     auto query_graph = make_query_graph(db, res);
-    auto join_tree = run_goo(query_graph);
+    auto join_tree = run_dp(query_graph);
     join_tree.print_tree_with_costs(query_graph);
 
     return 0;
