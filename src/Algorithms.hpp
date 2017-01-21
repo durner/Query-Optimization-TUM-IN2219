@@ -21,6 +21,8 @@ private:
     static std::vector<QueryGraphNode> get_tree_relations(const JoinTree& tree);
 
 public:
+    JoinTree() : is_leaf(true), leaf_node(nullptr) {}
+
     JoinTree(const JoinTree& other)
     : is_leaf(other.is_leaf), leaf_node{nullptr}, left_tree{}, right_tree{} {
         if (is_leaf) {
@@ -49,6 +51,13 @@ public:
       left_tree{std::make_unique<JoinTree>(left)},
       right_tree{std::make_unique<JoinTree>(right)} {}
 
+    JoinTree& operator=(JoinTree&& other) {
+        is_leaf = other.is_leaf;
+        leaf_node = other.leaf_node;
+        left_tree = std::move(other.left_tree);
+        right_tree = std::move(other.right_tree);
+        return *this;
+    }
 
 
     double cardinality(const QueryGraph& graph) const;
@@ -85,5 +94,7 @@ bool crossproduct(const std::unordered_map<uint32_t, QueryGraphNode>& map, uint3
         uint32_t r2, const QueryGraph& graph);
 
 bool subset(uint32_t r1, uint32_t r2);
+
+JoinTree run_quickpick(const QueryGraph& graph, const size_t num_trees);
 
 #endif

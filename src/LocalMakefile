@@ -21,3 +21,6 @@ bin/GOO$(EXEEXT): bin/GOOTest.o $(obj_rts) $(obj_sqlparser) $(obj_semana)
 	
 bin/DP$(EXEEXT): bin/DPTest.o $(obj_rts) $(obj_sqlparser) $(obj_semana)
 	$(BUILDEXE)
+
+bin/QuickPick$(EXEEXT): bin/QPTest.o $(obj_rts) $(obj_sqlparser) $(obj_semana)
+	$(BUILDEXE)
