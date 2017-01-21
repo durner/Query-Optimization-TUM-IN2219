@@ -14,7 +14,7 @@ EXEEXT:=
 endif
 
 all: bin/admin$(EXEEXT) bin/isql$(EXEEXT) bin/runsql$(EXEEXT) bin/QueryGraph$(EXEEXT) \
-     bin/GOO$(EXEEXT) bin/DP$(EXEEXT) examples_bin
+     bin/GOO$(EXEEXT) bin/DP$(EXEEXT) bin/QuickPick$(EXEEXT) examples_bin
 
 include src/LocalMakefile
 include examples/LocalMakefile
