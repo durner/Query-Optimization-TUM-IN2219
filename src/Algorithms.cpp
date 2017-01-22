@@ -392,6 +392,9 @@ found_connecting_tree:;
         }
 
         const double cost = tree.cost(graph);
+#ifdef _ALGO_DEBUG_
+        std::cerr << std::fixed << cost << std::endl;
+#endif
         if (cost < current_cost) {
             current_cost = cost;
             minimal_tree = std::move(tree);
