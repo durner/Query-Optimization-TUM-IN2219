@@ -369,7 +369,8 @@ found_connecting_tree:;
             // combine trees for all other found connections
             for (; edge_it != edges.end(); ++edge_it) {
                 auto tree_it = relation_tree.find(edge_it->connected_to_.relation_.binding);
-                if (tree_it != relation_tree.end()) {
+                if (tree_it != relation_tree.end() &&
+                        tree_it->second->second.count(relation) == 0) {
                     tree->first = JoinTree{
                         std::move(tree->first), std::move(tree_it->second->first)
                     };
