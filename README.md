@@ -20,3 +20,8 @@ Ordering on a query. It takes the same arguments as `isql`, i.e. `GOO
 
 After running `make` the program `bin/DP` can be used to run DPsub on a
 query. It takes the same arguments as `isql`, i.e. `DP <db> <query file>`.
+
+## Exercise 9
+
+After running `make` the program `bin/QuickPick` can be used to run QuickPick on a
+query. It takes the same arguments as `isql`, i.e. `QuickPick <db> <query file>`.
