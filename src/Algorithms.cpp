@@ -1,5 +1,6 @@
 #include "Algorithms.hpp"
 #include <algorithm>
+#include <initializer_list>
 #include <iostream>
 #include <limits>
 #include <list>
@@ -7,6 +8,7 @@
 #include <stack>
 #include <tuple>
 #include <unordered_map>
+#include <unordered_set>
 
 
 std::vector<QueryGraphNode> JoinTree::get_tree_relations(const JoinTree& tree) {
@@ -334,7 +336,10 @@ JoinTree run_quickpick(const QueryGraph& graph, const size_t num_trees) {
             relations.push_back(entry.first);
         }
         std::shuffle(relations.begin(), relations.end(), gen);
-        std::unordered_map<std::string, std::shared_ptr<JoinTree>> trees;
+        // list of (T, R) pairs, where T is a join tree and R is a set of all
+        // relations contained in the tree
+        std::list<std::pair<JoinTree, std::unordered_set<std::string>>> trees;
+        std::unordered_map<std::string, typename decltype(trees)::iterator> relation_tree;
         for (const auto& relation : relations) {
             const auto& entry = graph.at(relation);
             const auto& node = entry.first;
@@ -342,45 +347,57 @@ JoinTree run_quickpick(const QueryGraph& graph, const size_t num_trees) {
             auto edge_it = edges.begin();
             // try if node can be connected to existing tree
             for (; edge_it != edges.end(); ++edge_it) {
-                auto tree_it = trees.find(edge_it->connected_to_.relation_.binding);
-                if (tree_it != trees.end()) {
-                    tree_it->second = std::make_shared<JoinTree>(
-                        std::move(*tree_it->second), JoinTree{node}
-                    );
-                    trees[relation] = tree_it->second;
+                auto tree_it = relation_tree.find(edge_it->connected_to_.relation_.binding);
+                if (tree_it != relation_tree.end()) {
+                    tree_it->second->first = JoinTree{
+                        std::move(tree_it->second->first), JoinTree{node}
+                    };
+                    relation_tree[relation] = tree_it->second;
+                    tree_it->second->second.insert(relation);
+                    ++edge_it;
                     goto found_connecting_tree;
                 }
             }
-            trees[relation] = std::make_shared<JoinTree>(node);
+            relation_tree[relation] = trees.emplace(
+                trees.end(),
+                std::piecewise_construct,
+                std::forward_as_tuple(node),
+                std::forward_as_tuple(std::initializer_list<std::string>{relation})
+            );
 found_connecting_tree:;
-            auto& node_tree = trees.at(relation);
+            auto tree = relation_tree.at(relation);
             // combine trees for all other found connections
             for (; edge_it != edges.end(); ++edge_it) {
-                auto tree_it = trees.find(edge_it->connected_to_.relation_.binding);
-                if (tree_it != trees.end()) {
-                    node_tree = std::make_shared<JoinTree>(
-                        std::move(*node_tree), std::move(*tree_it->second)
-                    );
-                    tree_it->second = node_tree;
+                auto tree_it = relation_tree.find(edge_it->connected_to_.relation_.binding);
+                if (tree_it != relation_tree.end() &&
+                        tree_it->second->second.count(relation) == 0) {
+                    tree->first = JoinTree{
+                        std::move(tree->first), std::move(tree_it->second->first)
+                    };
+                    const auto rs = tree_it->second->second;
+                    trees.erase(tree_it->second);
+                    for (const auto& r : rs) {
+                        relation_tree[r] = tree;
+                        tree->second.insert(r);
+                    }
                 }
             }
         }
         // combine all remaining trees if the user gave us a cross product
         auto tree_it = trees.begin();
-        auto tree = tree_it->second;
+        auto& tree = tree_it->first;
+        ++tree_it;
         for (; tree_it != trees.end(); ++tree_it) {
-            if (tree_it->second != tree) {
-                tree = std::make_shared<JoinTree>(
-                    std::move(*tree), std::move(*tree_it->second)
-                );
-                tree_it->second = tree;
-            }
+            tree = JoinTree{std::move(tree), std::move(tree_it->first)};
         }
 
-        const double cost = tree->cost(graph);
+        const double cost = tree.cost(graph);
+#ifdef _ALGO_DEBUG_
+        std::cerr << std::fixed << cost << std::endl;
+#endif
         if (cost < current_cost) {
             current_cost = cost;
-            minimal_tree = std::move(*tree);
+            minimal_tree = std::move(tree);
         }
     }
     return minimal_tree;
