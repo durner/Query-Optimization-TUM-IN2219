@@ -1,0 +1,38 @@
+\documentclass{scrartcl}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[geometry]{ifsym}
+\usepackage{graphicx}
+\usepackage[outputdir=build]{minted}
+
+\newcommand{\selection}{\sigma}
+\newcommand{\projection}{\pi}
+\newcommand{\rename}{\rho}
+\newcommand{\join}{\mathbin{\text{\begin{tiny}\textifsym{|><|}\end{tiny}}}}
+\newcommand{\fullouterjoin}{\mathbin{\text{\begin{tiny}\textifsym{d|><|d}\end{tiny}}}}
+\newcommand{\leftouterjoin}{\mathbin{\text{\begin{tiny}\textifsym{d|><|}\end{tiny}}}}
+\newcommand{\rightouterjoin}{\mathbin{\text{\begin{tiny}\textifsym{|><|d}\end{tiny}}}}
+\newcommand{\semijoin}{\mathbin{\text{\begin{tiny}\textifsym{|><}\end{tiny}}}}
+\newcommand{\groupby}{\Gamma}
+
+\newcommand{\mtt}[1]{\text{\texttt{#1}}}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\section*{Exercise 1}
+\subsection*{a}
+\begin{align*}
+  {n \choose k} = \frac{n!}{k!(n-k)!} = \frac{n!}{(n-k)!(n - (n-k))!} = {n \choose n-k}
+\end{align*}
+
+\subsection*{b}
+\begin{align*}
+  {n - 1 \choose k} + {n - 1 \choose k - 1}  = \frac{(n-1)!}{k!((n-1)-k)!} + \frac{(n - 1)!}{(k-1)!((n - 1) - (k-1))!} = \\
+  = (n-1)!\left( \frac{n-k}{k!(n-k)!} + \frac{k}{k!(n-k)!} \right) = (n-1)!\left( \frac{n}{k!(n-k)!} \right) = \\
+  \frac{n(n-1)!}{k!(n-k)!} = \frac{n!}{k!(n-k)!} = {n \choose k}
+\end{align*}
+
+
+\end{document}
